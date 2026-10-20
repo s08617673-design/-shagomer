@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Qadam hisoblagich</string>
+    <string name="channel_name">Qadamlarni hisoblash</string>
+
+    <string name="balance_label">To‘lov kutilmoqda, ball</string>
+    <string name="sum">%1$s so‘m</string>
+    <string name="to_next">Keyingi ballgacha: %1$s qadam</string>
+    <string name="stat_today">bugun</string>
+    <string name="stat_total">jami qadam</string>
+    <string name="stat_earned">ball to‘plandi</string>
+    <string name="stat_paid">so‘m olindi</string>
+
+    <string name="days_title">So‘nggi kunlar</string>
+    <string name="no_days">Qadamlar hali yozilmagan. Telefonni o‘zingiz bilan olib yuring — hisob avtomatik boradi.</string>
+    <string name="setup_title">Ishtirokchi</string>
+    <string name="setup_hint">Ismingizni va homiy bergan jadval manzilini kiriting — aks holda qadamlar yuborilmaydi va ballar to‘lanmaydi.</string>
+    <string name="name_hint">Ismingiz (homiy sizni qanday biladi)</string>
+    <string name="url_hint">Homiy jadvali manzili (https://script.google.com/…)</string>
+    <string name="sync_now">Yuborish</string>
+    <string name="sync_never">Qadamlar hali yuborilmagan</string>
+    <string name="sync_running">Yuborilmoqda…</string>
+    <string name="sync_ok">Yuborildi: %1$s</string>
+    <string name="sync_failed">Yuborib bo‘lmadi (%1$s). Internet va manzilni tekshiring.</string>
+    <string name="participant_id">Sizning kodingiz: %1$s</string>
+    <string name="rate_label">Kurs: 1 ball = %1$s so‘m. Chegara: kuniga 1 ball.</string>
+    <string name="save">Saqlash</string>
+    <string name="saved">Saqlandi</string>
+    <string name="err_name">Ismingizni kiriting</string>
+    <string name="err_url">Manzil https:// bilan boshlanishi kerak</string>
+    <string name="err_setup">Avval ism va jadval manzilini kiriting</string>
+    <string name="today_done">Bugungi ball olindi ★</string>
+
+    <string name="permission_hint">Jismoniy faollikni aniqlash uchun ruxsat kerak, aks holda qadamlar hisoblanmaydi. Ruxsat berish uchun bosing.</string>
+    <string name="footer_hint">Qadamlarni telefonning o‘rnatilgan sensori hisoblaydi (Google Fit kabi) va homiy jadvaliga yuboradi. 10 000+ qadamli har bir kun uchun 1 ball beriladi; to‘lovni homiy kartaga qo‘lda o‘tkazadi. Ilovani batareya tejash sozlamalarida o‘chirmang.</string>
+
+    <string name="notif_title">Bugun: %1$s qadam</string>
+    <string name="notif_text">To‘lovga: %1$s ball · %2$s so‘m</string>
+    <string name="notif_point_title">+%1$d ball!</string>
+    <string name="notif_point_text">Yana 10 000 qadam bosildi. Homiy buni jadvalda ko‘radi.</string>
+</resources>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Шагомер</string>
+    <string name="channel_name">Подсчёт шагов</string>
+
+    <string name="balance_label">Ожидает выплаты, баллов</string>
+    <string name="sum">%1$s сум</string>
+    <string name="to_next">До следующего балла: %1$s шагов</string>
+    <string name="stat_today">сегодня</string>
+    <string name="stat_total">шагов всего</string>
+    <string name="stat_earned">баллов получено</string>
+    <string name="stat_paid">сум получено</string>
+
+    <string name="days_title">Последние дни</string>
+    <string name="no_days">Шаги ещё не записаны. Носите телефон с собой — подсчёт идёт автоматически.</string>
+    <string name="setup_title">Участник</string>
+    <string name="setup_hint">Введите своё имя и адрес таблицы, который дал спонсор, — иначе шаги не отправляются и баллы не выплачиваются.</string>
+    <string name="name_hint">Ваше имя (как вас знает спонсор)</string>
+    <string name="url_hint">Адрес таблицы спонсора (https://script.google.com/…)</string>
+    <string name="sync_now">Отправить</string>
+    <string name="sync_never">Шаги ещё не отправлялись</string>
+    <string name="sync_running">Отправка…</string>
+    <string name="sync_ok">Отправлено: %1$s</string>
+    <string name="sync_failed">Не удалось отправить (%1$s). Проверьте интернет и адрес.</string>
+    <string name="participant_id">Ваш код: %1$s</string>
+    <string name="rate_label">Курс: 1 балл = %1$s сум. Лимит: 1 балл в день.</string>
+    <string name="save">Сохранить</string>
+    <string name="saved">Сохранено</string>
+    <string name="err_name">Введите имя</string>
+    <string name="err_url">Адрес должен начинаться с https://</string>
+    <string name="err_setup">Сначала укажите имя и адрес таблицы</string>
+    <string name="today_done">Сегодняшний балл получен ★</string>
+
+    <string name="permission_hint">Нужно разрешение на распознавание активности, иначе шаги не считаются. Нажмите, чтобы разрешить.</string>
+    <string name="footer_hint">Шаги считает встроенный датчик телефона, как в Google Fit, и отправляет их в таблицу спонсора. За день с 10 000+ шагов начисляется 1 балл; выплаты спонсор делает вручную на карту. Не отключайте приложение в настройках экономии батареи.</string>
+
+    <string name="notif_title">Сегодня: %1$s шагов</string>
+    <string name="notif_text">К выплате: %1$s балл. · %2$s сум</string>
+    <string name="notif_point_title">+%1$d балл!</string>
+    <string name="notif_point_text">Ещё 10 000 шагов пройдено. Спонсор увидит это в таблице.</string>
+</resources>

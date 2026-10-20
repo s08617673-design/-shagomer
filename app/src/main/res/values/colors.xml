@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg">#F3F6F1</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="fg">#16211A</color>
+    <color name="muted">#5E6B63</color>
+    <color name="line">#D7E0D9</color>
+    <color name="accent">#1F8A4C</color>
+    <color name="accent_soft">#DFF3E6</color>
+    <color name="gold">#C98A1B</color>
+    <color name="gold_fg">#1A1205</color>
+    <color name="warning_bg">#FBEFD6</color>
+    <color name="warning_fg">#7A4E05</color>
+    <color name="hero_start">#1F8A4C</color>
+    <color name="hero_end">#0F5A3A</color>
+    <color name="hero_track">#33FFFFFF</color>
+    <color name="on_hero">#FFFFFF</color>
+    <color name="on_hero_muted">#B8E6C9</color>
+    <color name="gold_on_hero">#FFD27A</color>
+    <color name="launcher_bg">#1F8A4C</color>
+</resources>

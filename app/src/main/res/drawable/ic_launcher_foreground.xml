@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- кольцо прогресса -->
+    <path android:fillColor="#00000000" android:strokeColor="#66FFFFFF" android:strokeWidth="6"
+        android:pathData="M24,54 a30,30 0 1,0 60,0 a30,30 0 1,0 -60,0" />
+    <path android:fillColor="#00000000" android:strokeColor="#FFFFFF" android:strokeWidth="6" android:strokeLineCap="round"
+        android:pathData="M54,24 A30,30 0 1,1 24,54" />
+    <!-- след ступни -->
+    <path android:fillColor="#FFD27A"
+        android:pathData="M45,60 a9,14 0 1,0 18,0 a9,14 0 1,0 -18,0z" />
+    <path android:fillColor="#FFD27A"
+        android:pathData="M40,42 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0z M47,38.5 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0z M54.5,38.5 a2.8,2.8 0 1,0 5.6,0 a2.8,2.8 0 1,0 -5.6,0z M61.5,41.5 a2.5,2.5 0 1,0 5,0 a2.5,2.5 0 1,0 -5,0z" />
+</vector>
