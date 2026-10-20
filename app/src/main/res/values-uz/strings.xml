@@ -38,4 +38,8 @@
     <string name="notif_text">To‘lovga: %1$s ball · %2$s so‘m</string>
     <string name="notif_point_title">+%1$d ball!</string>
     <string name="notif_point_text">Yana 10 000 qadam bosildi. Homiy buni jadvalda ko‘radi.</string>
+
+    <string name="share_app">Ilovani ulashish</string>
+    <string name="share_text">Qadam hisoblagich — qadamlarni sanab, ball beradigan ilova. Yuklab olish: %1$s\n\nYuklab olgach: faylni oching → O‘rnatishga ruxsat bering → O‘rnatish.</string>
+    <string name="share_title">Havolani yuborish…</string>
 </resources>

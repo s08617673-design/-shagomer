@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         b.permissionHint.setOnClickListener { ensurePermissions() }
+        b.shareButton.setOnClickListener { shareApp() }
 
         // Переключатель языка RU / UZ
         val current = AppCompatDelegate.getApplicationLocales().toLanguageTags()
@@ -174,6 +175,16 @@ class MainActivity : AppCompatActivity() {
         render()
         toast(R.string.saved)
         if (url.isNotEmpty()) Sync.run(this, force = true)
+    }
+
+    /** Открывает системное окно «Поделиться» со ссылкой на скачивание приложения. */
+    private fun shareApp() {
+        val text = getString(R.string.share_text, getString(R.string.download_url))
+        val send = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
+        startActivity(Intent.createChooser(send, getString(R.string.share_title)))
     }
 
     private fun fmtDate(iso: String): String {

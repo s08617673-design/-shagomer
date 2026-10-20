@@ -398,6 +398,15 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/shareButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/share_app"
+            app:cornerRadius="14dp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

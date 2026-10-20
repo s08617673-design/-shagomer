@@ -11,8 +11,8 @@ android {
         applicationId = "uz.shagomer"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
     }
 
     // Ключ подписи лежит в проекте, чтобы каждая новая сборка ставилась поверх старой

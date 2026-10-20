@@ -38,4 +38,9 @@
     <string name="notif_text">К выплате: %1$s балл. · %2$s сум</string>
     <string name="notif_point_title">+%1$d балл!</string>
     <string name="notif_point_text">Ещё 10 000 шагов пройдено. Спонсор увидит это в таблице.</string>
+
+    <string name="download_url" translatable="false">https://github.com/s08617673-design/-shagomer/releases/latest/download/shagomer.apk</string>
+    <string name="share_app">Поделиться приложением</string>
+    <string name="share_text">Шагомер — приложение, которое считает шаги и начисляет баллы. Скачать: %1$s\n\nПосле скачивания: открыть файл → Разрешить установку → Установить.</string>
+    <string name="share_title">Отправить ссылку через…</string>
 </resources>
