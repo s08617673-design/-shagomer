@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Шагомер</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#1f8a4c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Шагомер">
+<style>
+  :root {
+    --bg:#f3f6f1; --surface:#fff; --fg:#16211a; --muted:#5e6b63; --line:#d7e0d9;
+    --accent:#1f8a4c; --accent-ink:#fff; --hero1:#1f8a4c; --hero2:#0f5a3a;
+    --gold:#c98a1b; --gold-soft:#fbefd6; --gold-hero:#ffd27a; --danger:#b8402f; --warn-bg:#fbefd6; --warn-fg:#7a4e05;
+  }
+  @media (prefers-color-scheme: dark) { :root {
+    --bg:#0f1612; --surface:#182219; --fg:#ecf2ed; --muted:#9aab9f; --line:#2a3a2e;
+    --accent:#3fbf74; --accent-ink:#07130b; --hero1:#1e6b3e; --hero2:#0b3a25;
+    --gold:#e6b04a; --gold-soft:#3a2d12; --danger:#e4705d; --warn-bg:#3a2d12; --warn-fg:#f3d69a; color-scheme:dark;
+  } }
+  * { box-sizing:border-box; }
+  html, body { margin:0; }
+  body { background:var(--bg); color:var(--fg); font-family:-apple-system,"Segoe UI",Roboto,system-ui,sans-serif; font-size:16px; line-height:1.45;
+    padding: calc(12px + env(safe-area-inset-top,0px)) max(16px, env(safe-area-inset-right,0px)) calc(40px + env(safe-area-inset-bottom,0px)) max(16px, env(safe-area-inset-left,0px)); }
+  .wrap { max-width:520px; margin:0 auto; display:grid; gap:14px; }
+  header { display:flex; align-items:center; justify-content:space-between; }
+  h1 { font-size:1.7rem; margin:0; letter-spacing:-.02em; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .seg button { background:transparent; color:var(--muted); border:0; padding:6px 12px; font-size:.8rem; font-weight:700; }
+  .seg button.on { background:var(--accent); color:var(--accent-ink); }
+  h2 { font-size:1rem; margin:8px 0 0; }
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px; }
+  .hero { background:linear-gradient(135deg,var(--hero1),var(--hero2)); color:#fff; border-radius:22px; padding:22px; display:grid; grid-template-columns:150px 1fr; gap:18px; align-items:center; }
+  .ring { position:relative; width:150px; height:150px; }
+  .ring svg { width:150px; height:150px; transform:rotate(-90deg); }
+  .ring .c { fill:none; stroke:rgba(255,255,255,.2); stroke-width:14; }
+  .ring .p { fill:none; stroke:#fff; stroke-width:14; stroke-linecap:round; stroke-dasharray:408.4; stroke-dashoffset:408.4; transition:stroke-dashoffset .5s; }
+  .ring .t { position:absolute; inset:0; display:grid; place-content:center; text-align:center; }
+  .ring .t b { font-size:1.6rem; font-variant-numeric:tabular-nums; }
+  .ring .t span { font-size:.7rem; opacity:.8; }
+  .hero .lbl { font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; opacity:.8; }
+  .hero .big { font-size:2.8rem; font-weight:800; line-height:1.05; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+  .hero .money { color:var(--gold-hero); font-weight:800; font-size:1.15rem; }
+  .hero .sub { font-size:.78rem; opacity:.85; margin-top:8px; }
+  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .stat { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:12px 14px; }
+  .stat b { display:block; font-size:1.15rem; font-variant-numeric:tabular-nums; }
+  .stat.gold b { color:var(--gold); }
+  .stat span { font-size:.7rem; color:var(--muted); }
+  .track { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .track .dot { width:10px; height:10px; border-radius:50%; background:var(--muted); }
+  .track.on .dot { background:var(--accent); box-shadow:0 0 0 4px rgba(63,191,116,.25); }
+  .track .st { flex:1; font-size:.85rem; color:var(--muted); min-width:0; }
+  button.btn { font:inherit; font-weight:700; border:0; border-radius:14px; padding:13px 16px; background:var(--accent); color:var(--accent-ink); width:100%; }
+  button.ghost { background:transparent; color:var(--fg); border:1px solid var(--line); font-weight:600; }
+  button.btn:disabled { opacity:.45; }
+  .row { display:flex; gap:8px; }
+  .row > * { flex:1; min-width:0; }
+  label { display:grid; gap:4px; font-size:.78rem; color:var(--muted); }
+  input { font:inherit; color:var(--fg); background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:11px 12px; width:100%; }
+  input:focus { outline:2px solid var(--accent); }
+  .hint { font-size:.8rem; color:var(--muted); margin:6px 0 0; }
+  .warn { background:var(--warn-bg); color:var(--warn-fg); border-radius:10px; padding:10px 12px; font-size:.85rem; }
+  .msg { font-size:.85rem; min-height:1.2em; margin:6px 0 0; }
+  .msg.ok { color:var(--accent); } .msg.err { color:var(--danger); }
+  .days { display:grid; }
+  .day { display:grid; grid-template-columns:52px 1fr 64px 34px; gap:10px; align-items:center; padding:9px 0; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums; }
+  .day:last-child { border-bottom:0; }
+  .day .d { color:var(--muted); font-size:.85rem; }
+  .day .bar { height:8px; border-radius:4px; background:var(--line); overflow:hidden; }
+  .day .bar i { display:block; height:100%; background:var(--accent); }
+  .day b { text-align:right; }
+  .day .badge { background:var(--gold); color:#1a1205; border-radius:8px; font-size:.7rem; font-weight:800; text-align:center; padding:2px 0; visibility:hidden; }
+  .day.hit .badge { visibility:visible; }
+  .day.hit .bar i { background:var(--gold); }
+  .empty { color:var(--muted); font-size:.9rem; padding:8px 0; }
+  .install { display:none; }
+  .install.show { display:block; }
+  details summary { cursor:pointer; color:var(--muted); font-size:.9rem; font-weight:600; }
+  @media (max-width:400px) { .hero { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 data-i18n="app">Шагомер</h1>
+    <div class="seg"><button id="lang-ru" class="on">RU</button><button id="lang-uz">UZ</button></div>
+  </header>
+
+  <div class="card" id="android-card" style="display:none">
+    <b data-i18n="android_t">У вас Android?</b>
+    <p class="hint" data-i18n="android_h">Лучше установить полную версию: она считает шаги в фоне, даже когда телефон в кармане.</p>
+    <a class="btn" id="android-btn" href="https://github.com/s08617673-design/-shagomer/releases/latest/download/shagomer.apk" style="display:block;text-align:center;text-decoration:none;margin-top:8px" data-i18n="android_b">Скачать для Android</a>
+  </div>
+
+  <div class="card install" id="install-card">
+    <b data-i18n="install_t">Установите на главный экран</b>
+    <p class="hint" id="install-hint" data-i18n="install_h">Нажмите «Установить» — появится иконка, как у обычного приложения.</p>
+    <button class="btn" id="install-btn" data-i18n="install_b" style="margin-top:8px">Установить</button>
+  </div>
+
+  <section class="hero">
+    <div class="ring">
+      <svg viewBox="0 0 150 150"><circle class="c" cx="75" cy="75" r="65"/><circle class="p" id="ring" cx="75" cy="75" r="65"/></svg>
+      <div class="t"><b id="today">0</b><span data-i18n="today">сегодня</span></div>
+    </div>
+    <div>
+      <div class="lbl" data-i18n="balance">Ожидает выплаты, баллов</div>
+      <div class="big" id="balance">0</div>
+      <div class="money" id="money">0 сум</div>
+      <div class="sub" id="to-next"></div>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><b id="s-total">0</b><span data-i18n="st_total">шагов всего</span></div>
+    <div class="stat"><b id="s-earned">0</b><span data-i18n="st_earned">баллов получено</span></div>
+    <div class="stat gold"><b id="s-paid">0</b><span data-i18n="st_paid">сум получено</span></div>
+  </div>
+
+  <section class="card">
+    <div class="track" id="track">
+      <span class="dot"></span>
+      <span class="st" id="track-status" data-i18n="track_off">Подсчёт выключен</span>
+      <button class="btn" id="track-btn" style="width:auto" data-i18n="track_start">Начать подсчёт</button>
+    </div>
+    <p class="hint" data-i18n="track_hint">Считает шаги по датчику движения, пока приложение открыто (держите телефон в руке или кармане, экран не выключайте). Шаги за день из Google Fit / «Здоровья» можно ввести вручную ниже.</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0" data-i18n="manual_t">Ввести шаги за день</h2>
+    <form id="f-steps">
+      <div class="row">
+        <label><span data-i18n="date">Дата</span><input type="date" id="in-date" required></label>
+        <label><span data-i18n="steps">Шаги</span><input type="number" id="in-steps" min="0" max="200000" step="1" required></label>
+      </div>
+      <button class="btn" type="submit" style="margin-top:10px" data-i18n="save">Сохранить</button>
+      <p class="msg" id="m-steps"></p>
+    </form>
+  </section>
+
+  <h2 data-i18n="days_t">Последние дни</h2>
+  <section class="card"><div class="days" id="days"></div></section>
+
+  <h2 data-i18n="setup_t">Участник</h2>
+  <section class="card">
+    <div class="warn" id="setup-hint" data-i18n="setup_h">Введите своё имя и адрес таблицы, который дал спонсор, — иначе шаги не отправляются и баллы не выплачиваются.</div>
+    <form id="f-setup" style="margin-top:10px">
+      <label><span data-i18n="name">Ваше имя (как вас знает спонсор)</span><input type="text" id="in-name" autocomplete="name"></label>
+      <label style="margin-top:8px"><span data-i18n="url">Адрес таблицы спонсора</span><input type="url" id="in-url" placeholder="https://script.google.com/macros/s/…/exec"></label>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" type="submit" data-i18n="save">Сохранить</button>
+        <button class="btn ghost" type="button" id="sync-btn" data-i18n="send">Отправить</button>
+      </div>
+      <p class="msg" id="m-setup"></p>
+      <p class="hint" id="sync-status"></p>
+      <p class="hint" id="pid"></p>
+      <p class="hint" id="rate"></p>
+    </form>
+  </section>
+
+  <p class="hint" data-i18n="footer">За день с 10 000+ шагов начисляется 1 балл (максимум 1 в день). Выплаты спонсор делает вручную на карту и отмечает в таблице — после этого баланс здесь обновится.</p>
+</div>
+
+<script>
+(function () {
+  var STEP_PER_POINT = 10000, MAX_PER_DAY = 1;
+  var I18N = {
+    ru: { app:'Шагомер', today:'сегодня', balance:'Ожидает выплаты, баллов', st_total:'шагов всего', st_earned:'баллов получено', st_paid:'сум получено',
+      track_off:'Подсчёт выключен', track_on:'Идёт подсчёт…', track_start:'Начать подсчёт', track_stop:'Стоп', track_na:'Датчик движения недоступен в этом браузере',
+      track_hint:'Считает шаги по датчику движения, пока приложение открыто (держите телефон в руке или кармане, экран не выключайте). Шаги за день из Google Fit / «Здоровья» можно ввести вручную ниже.',
+      manual_t:'Ввести шаги за день', date:'Дата', steps:'Шаги', save:'Сохранить', days_t:'Последние дни', setup_t:'Участник',
+      setup_h:'Введите своё имя и адрес таблицы, который дал спонсор, — иначе шаги не отправляются и баллы не выплачиваются.',
+      name:'Ваше имя (как вас знает спонсор)', url:'Адрес таблицы спонсора', send:'Отправить',
+      footer:'За день с 10 000+ шагов начисляется 1 балл (максимум 1 в день). Выплаты спонсор делает вручную на карту и отмечает в таблице — после этого баланс здесь обновится.',
+      install_t:'Установите на главный экран', install_h:'Нажмите «Установить» — появится иконка, как у обычного приложения.', install_b:'Установить',
+      install_ios:'На iPhone: нажмите «Поделиться» (квадрат со стрелкой) внизу Safari → «На экран Домой».',
+      android_t:'У вас Android?', android_h:'Лучше установить полную версию: она считает шаги в фоне, даже когда телефон в кармане.', android_b:'Скачать для Android',
+      sum:'сум', to_next:'До следующего балла: {n} шагов', done:'Сегодняшний балл получен ★', no_days:'Шаги ещё не записаны.',
+      saved:'Сохранено', saved_pts:'Сохранено. Новых баллов: +{n}', err_steps:'Введите дату и число шагов', err_name:'Введите имя', err_url:'Адрес должен начинаться с https://',
+      sync_never:'Шаги ещё не отправлялись', sync_ok:'Отправлено: {t}', sync_fail:'Не удалось отправить ({t}). Проверьте интернет и адрес.', sync_run:'Отправка…', pid:'Ваш код: {id}', rate:'Курс: 1 балл = {r} сум. Лимит: 1 балл в день.' },
+    uz: { app:'Qadam hisoblagich', today:'bugun', balance:'To‘lov kutilmoqda, ball', st_total:'jami qadam', st_earned:'ball to‘plandi', st_paid:'so‘m olindi',
+      track_off:'Hisoblash o‘chiq', track_on:'Hisoblanmoqda…', track_start:'Hisoblashni boshlash', track_stop:'To‘xtatish', track_na:'Bu brauzerda harakat sensori mavjud emas',
+      track_hint:'Ilova ochiq bo‘lganda harakat sensori orqali qadamlarni hisoblaydi (telefonni qo‘lda yoki cho‘ntakda tuting, ekranni o‘chirmang). Google Fit / «Salomatlik»dagi kunlik qadamlarni quyida qo‘lda kiritish mumkin.',
+      manual_t:'Kunlik qadamlarni kiritish', date:'Sana', steps:'Qadam', save:'Saqlash', days_t:'So‘nggi kunlar', setup_t:'Ishtirokchi',
+      setup_h:'Ismingizni va homiy bergan jadval manzilini kiriting — aks holda qadamlar yuborilmaydi va ballar to‘lanmaydi.',
+      name:'Ismingiz (homiy sizni qanday biladi)', url:'Homiy jadvali manzili', send:'Yuborish',
+      footer:'10 000+ qadamli har bir kun uchun 1 ball beriladi (kuniga ko‘pi bilan 1). To‘lovni homiy kartaga qo‘lda o‘tkazadi va jadvalda belgilaydi — shundan so‘ng bu yerdagi balans yangilanadi.',
+      install_t:'Asosiy ekranga o‘rnating', install_h:'«O‘rnatish»ni bosing — oddiy ilova kabi ikonka paydo bo‘ladi.', install_b:'O‘rnatish',
+      install_ios:'iPhone’da: Safari pastidagi «Ulashish» (strelkali kvadrat) → «Asosiy ekranga».',
+      android_t:'Sizda Android-mi?', android_h:'To‘liq versiyani o‘rnatgan ma’qul: u telefon cho‘ntakda bo‘lsa ham qadamlarni fonda sanaydi.', android_b:'Android uchun yuklab olish',
+      sum:'so‘m', to_next:'Keyingi ballgacha: {n} qadam', done:'Bugungi ball olindi ★', no_days:'Qadamlar hali yozilmagan.',
+      saved:'Saqlandi', saved_pts:'Saqlandi. Yangi ballar: +{n}', err_steps:'Sana va qadam sonini kiriting', err_name:'Ismingizni kiriting', err_url:'Manzil https:// bilan boshlanishi kerak',
+      sync_never:'Qadamlar hali yuborilmagan', sync_ok:'Yuborildi: {t}', sync_fail:'Yuborib bo‘lmadi ({t}). Internet va manzilni tekshiring.', sync_run:'Yuborilmoqda…', pid:'Sizning kodingiz: {id}', rate:'Kurs: 1 ball = {r} so‘m. Chegara: kuniga 1 ball.' }
+  };
+  var state = { lang:'ru', id:'', name:'', url:'', rate:5000, days:{}, paidPoints:0, paidAmount:0, lastSync:0, lastSyncOk:false };
+  var $ = function (id) { return document.getElementById(id); };
+  var T = function (k, v) { var s = (I18N[state.lang][k] || I18N.ru[k] || k); if (v) for (var x in v) s = s.replace('{'+x+'}', v[x]); return s; };
+  var fmt = function (n) { return Math.round(n).toLocaleString('ru-RU'); };
+  var todayISO = function () { var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+  var fmtDate = function (iso) { var p = iso.split('-'); return p[2]+'.'+p[1]; };
+  var pointsFor = function (s) { return Math.min(Math.floor(s / STEP_PER_POINT), MAX_PER_DAY); };
+
+  function load() { try { var d = JSON.parse(localStorage.getItem('shagomer')); if (d) for (var k in d) state[k] = d[k]; } catch (e) {} if (!state.id) state.id = Math.random().toString(36).slice(2,10); save(); }
+  function save() { try { localStorage.setItem('shagomer', JSON.stringify(state)); } catch (e) {} }
+
+  function totals() {
+    var total = 0, earned = 0; for (var k in state.days) { total += state.days[k]; earned += pointsFor(state.days[k]); }
+    var today = state.days[todayISO()] || 0;
+    return { total:total, today:today, earned:earned, balance: earned - state.paidPoints };
+  }
+
+  function applyLang() {
+    document.documentElement.lang = state.lang;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) { el.textContent = T(el.getAttribute('data-i18n')); });
+    $('lang-ru').className = state.lang === 'ru' ? 'on' : ''; $('lang-uz').className = state.lang === 'uz' ? 'on' : '';
+    document.title = T('app');
+  }
+
+  function render() {
+    applyLang();
+    var t = totals();
+    $('balance').textContent = fmt(t.balance);
+    $('money').textContent = fmt(t.balance * state.rate) + ' ' + T('sum');
+    $('to-next').textContent = t.today >= STEP_PER_POINT ? T('done') : T('to_next', { n: fmt(STEP_PER_POINT - t.today) });
+    $('today').textContent = fmt(t.today);
+    $('ring').style.strokeDashoffset = (408.4 * (1 - Math.min(t.today, STEP_PER_POINT) / STEP_PER_POINT)).toFixed(1);
+    $('s-total').textContent = fmt(t.total); $('s-earned').textContent = fmt(t.earned); $('s-paid').textContent = fmt(state.paidAmount);
+    $('in-name').value = state.name; $('in-url').value = state.url;
+    $('setup-hint').style.display = (state.name && state.url) ? 'none' : 'block';
+    $('pid').textContent = T('pid', { id: state.id });
+    $('rate').textContent = T('rate', { r: fmt(state.rate) });
+    $('sync-status').textContent = !state.lastSync ? T('sync_never') : T(state.lastSyncOk ? 'sync_ok' : 'sync_fail', { t: new Date(state.lastSync).toLocaleString('ru-RU', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) });
+    $('track-status').textContent = tracking ? T('track_on') : T('track_off');
+    $('track-btn').textContent = tracking ? T('track_stop') : T('track_start');
+    $('track').className = 'track' + (tracking ? ' on' : '');
+
+    var keys = Object.keys(state.days).sort().reverse().slice(0,14), ul = $('days'); ul.innerHTML = '';
+    if (!keys.length) ul.innerHTML = '<div class="empty">' + T('no_days') + '</div>';
+    keys.forEach(function (k) {
+      var s = state.days[k], el = document.createElement('div');
+      el.className = 'day' + (s >= STEP_PER_POINT ? ' hit' : '');
+      el.innerHTML = '<span class="d">' + fmtDate(k) + '</span><span class="bar"><i style="width:' + Math.min(100, s/STEP_PER_POINT*100) + '%"></i></span><b>' + fmt(s) + '</b><span class="badge">+1</span>';
+      ul.appendChild(el);
+    });
+  }
+
+  function flash(id, text, ok) { var m = $(id); m.textContent = text; m.className = 'msg ' + (ok === false ? 'err' : 'ok'); setTimeout(function () { if (m.textContent === text) m.textContent = ''; }, 3000); }
+
+  // ---------- счётчик шагов по акселерометру ----------
+  var tracking = false, lastPeak = 0, smooth = 0, pending = 0, flushTimer = null;
+  function onMotion(e) {
+    var a = e.accelerationIncludingGravity; if (!a) return;
+    var mag = Math.sqrt(a.x*a.x + a.y*a.y + a.z*a.z);
+    smooth = smooth ? smooth * 0.8 + mag * 0.2 : mag;
+    var diff = mag - smooth, now = Date.now();
+    if (diff > 1.6 && now - lastPeak > 280) {        // пик ускорения ≥1.6 м/с², не чаще 3.5 шагов/с
+      lastPeak = now; pending++;
+      if (!flushTimer) flushTimer = setTimeout(flushSteps, 1500);
+    }
+  }
+  function flushSteps() {
+    flushTimer = null; if (!pending) return;
+    var t = todayISO(), before = totals().earned;
+    state.days[t] = (state.days[t] || 0) + pending; pending = 0; save(); render();
+    if (totals().earned > before) { sync(true); if (navigator.vibrate) navigator.vibrate([100,50,100]); }
+  }
+  var wakeLock = null;
+  function toggleTracking() {
+    if (tracking) { window.removeEventListener('devicemotion', onMotion); tracking = false; if (wakeLock) { wakeLock.release(); wakeLock = null; } render(); return; }
+    if (typeof DeviceMotionEvent === 'undefined') { flash('m-steps', T('track_na'), false); return; }
+    var start = function () { window.addEventListener('devicemotion', onMotion); tracking = true; render();
+      if (navigator.wakeLock) navigator.wakeLock.request('screen').then(function (l) { wakeLock = l; }).catch(function () {}); };
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission().then(function (r) { if (r === 'granted') start(); else flash('m-steps', T('track_na'), false); }).catch(function () { flash('m-steps', T('track_na'), false); });
+    } else start();
+  }
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && tracking && navigator.wakeLock && !wakeLock) navigator.wakeLock.request('screen').then(function (l) { wakeLock = l; }).catch(function () {}); });
+
+  // ---------- синхронизация с таблицей спонсора ----------
+  var lastAttempt = 0;
+  function sync(force) {
+    if (!state.url || !state.name) return;
+    var now = Date.now(); if (!force && now - lastAttempt < 10*60*1000) return; lastAttempt = now;
+    var keys = Object.keys(state.days).sort().slice(-14), days = {}; keys.forEach(function (k) { days[k] = state.days[k]; });
+    $('sync-status').textContent = T('sync_run');
+    fetch(state.url, { method:'POST', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body: JSON.stringify({ id: state.id, name: state.name, days: days }), redirect:'follow' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j.error) throw new Error(j.error);
+        state.paidPoints = j.paidPoints || 0; state.paidAmount = j.paidAmount || 0; if (j.rate > 0) state.rate = j.rate;
+        state.lastSync = Date.now(); state.lastSyncOk = true; save(); render(); })
+      .catch(function () { state.lastSync = Date.now(); state.lastSyncOk = false; save(); render(); });
+  }
+
+  // ---------- события ----------
+  $('lang-ru').onclick = function () { state.lang = 'ru'; save(); render(); };
+  $('lang-uz').onclick = function () { state.lang = 'uz'; save(); render(); };
+  $('track-btn').onclick = toggleTracking;
+  $('in-date').value = todayISO();
+  $('f-steps').onsubmit = function (e) {
+    e.preventDefault(); var d = $('in-date').value, s = parseInt($('in-steps').value, 10);
+    if (!d || isNaN(s) || s < 0) return flash('m-steps', T('err_steps'), false);
+    var before = totals().earned; if (s <= 0) delete state.days[d]; else state.days[d] = s; save();
+    var g = totals().earned - before; $('in-steps').value = ''; render();
+    flash('m-steps', g > 0 ? T('saved_pts', { n: g }) : T('saved')); sync(true);
+  };
+  $('f-setup').onsubmit = function (e) {
+    e.preventDefault(); var n = $('in-name').value.trim(), u = $('in-url').value.trim();
+    if (!n) return flash('m-setup', T('err_name'), false);
+    if (u && u.indexOf('https://') !== 0) return flash('m-setup', T('err_url'), false);
+    state.name = n; state.url = u; save(); render(); flash('m-setup', T('saved')); sync(true);
+  };
+  $('sync-btn').onclick = function () { sync(true); };
+
+  // ---------- установка на главный экран ----------
+  var deferred = null, standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; if (!standalone) $('install-card').className = 'card install show'; });
+  $('install-btn').onclick = function () { if (deferred) { deferred.prompt(); deferred = null; $('install-card').className = 'card install'; } };
+  if (!standalone && /android/i.test(navigator.userAgent)) $('android-card').style.display = 'block';
+  if (!standalone && /iphone|ipad/i.test(navigator.userAgent)) {
+    $('install-card').className = 'card install show'; $('install-btn').style.display = 'none';
+    $('install-hint').removeAttribute('data-i18n');
+    var iosHint = function () { $('install-hint').textContent = T('install_ios'); }; iosHint();
+    $('lang-ru').addEventListener('click', iosHint); $('lang-uz').addEventListener('click', iosHint);
+  }
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+
+  load(); render(); sync(false);
+})();
+</script>
+</body>
+</html>

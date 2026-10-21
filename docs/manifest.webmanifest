@@ -1,0 +1,17 @@
+{
+  "name": "Шагомер · Qadam hisoblagich",
+  "short_name": "Шагомер",
+  "description": "1 балл за каждые 10 000 шагов — баллы обмениваются на деньги",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f3f6f1",
+  "theme_color": "#1f8a4c",
+  "lang": "ru",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
