@@ -21,7 +21,8 @@
 *{box-sizing:border-box}
 html,body{background:var(--night);color:var(--cream)}
 body{font-family:var(--f-ui);font-size:16px;line-height:1.45;padding-block:18px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.wrap{max-width:1120px;margin:0 auto;display:grid;gap:12px}
+.wrap{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.wrap>*{min-width:0}
 .top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .top>div{min-width:0}
 h1{font-family:var(--f-title);font-weight:700;font-size:clamp(2.4rem,6vw,3.5rem);line-height:.95;margin:0}
